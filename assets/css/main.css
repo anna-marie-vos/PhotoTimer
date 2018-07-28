@@ -1,0 +1,17 @@
+
+header {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
+container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+button img {
+  margin-top:1em;
+  margin-bottom: 1em;
+}
