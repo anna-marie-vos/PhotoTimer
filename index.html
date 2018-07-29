@@ -15,24 +15,123 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- js -->
 
+    <script type="text/javascript">
+      // The Browser API key obtained from the Google API Console.
+      var developerKey = '----rROY3cidiEsv41YtVY';
+
+      // The Client ID obtained from the Google API Console. Replace with your own Client ID.
+      var clientId = '----ogpddik95k1g2plaqb2h46k1ish3albi.apps.googleusercontent.com';
+
+      // Scope to use to access user's photos.
+      var scope = 'https://www.googleapis.com/auth/drive.readonly';
+
+      var pickerApiLoaded = false;
+      var oauthToken;
+
+      // Use the API Loader script to load google.picker and gapi.auth.
+      function onApiLoad() {
+        gapi.load('auth2', onAuthApiLoad);
+        gapi.load('picker', onPickerApiLoad);
+      }
+
+      function onAuthApiLoad() {
+        var authBtn = document.getElementById('auth');
+        authBtn.disabled = false;
+        authBtn.addEventListener('click', function() {
+          gapi.auth2.authorize({
+            client_id: clientId,
+            scope: scope
+          }, handleAuthResult);
+        });
+      }
+
+      function onPickerApiLoad() {
+        pickerApiLoaded = true;
+        createPicker();
+      }
+
+      function handleAuthResult(authResult) {
+        if (authResult && !authResult.error) {
+          oauthToken = authResult.access_token;
+          createPicker();
+        }
+      }
+
+      // Create and render a Picker object for picking user Photos.
+      function createPicker() {
+        if (pickerApiLoaded && oauthToken) {
+          var view = new google.picker.DocsView()
+          view.setIncludeFolders(true);
+          var picker = new google.picker.PickerBuilder()
+            .addView(view)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setOAuthToken(oauthToken)
+            .setDeveloperKey(developerKey)
+            .setCallback(pickerCallback)
+            .build();
+          picker.setVisible(true);
+        }
+      }
+
+      // A simple callback implementation.
+      function pickerCallback(data) {
+        var url = 'nothing';
+        if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+          var docs = data[google.picker.Response.DOCUMENTS]
+          console.log({
+            docs
+          });
+          var doc = data[google.picker.Response.DOCUMENTS][0];
+          url = doc[google.picker.Document.URL];
+        }
+        var message = 'You picked: ' + url;
+        document.getElementById('result').innerHTML = message;
+      }
+
+    </script>
+
   </head>
 
   <body>
     <header>
+      <h2>30</h2>
       <h1>Photo Timer</h1>
     </header>
 
-    <container>
+    <container style="height:500px;">
       <button class="button-primary">
         <img src="./assets/images/navigate_before_24px.svg" alt="back">
       </button>
 
       <section>
-        <p>This is where the photo goes</p>
+        <button type="button" id="auth" disabled>Authenticate</button>
+
+        <div id="result"></div>
+
+        <!-- The Google API Loader script. -->
+        <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
       </section>
       <button class="button-primary">
         <img src="./assets/images/navigate_next_24px.svg" alt="back">
       </button>
+    </container>
+
+    <p>Pick a time interval</p>
+    <container>
+      <button>
+        30 seconds
+      </button>
+      <button>
+        60 seconds
+      </button>
+      <input placeholder="custom">
+      <button>
+        pause
+      </button>
+      <button>
+        shuffle
+      </button>
+      </input>
     </container>
 
     <footer>
