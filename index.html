@@ -16,11 +16,12 @@
     <!-- js -->
 
     <script type="text/javascript">
-      // The Browser API key obtained from the Google API Console.
-      var developerKey = '----rROY3cidiEsv41YtVY';
+    // The Browser API key obtained from the Google API Console.
+    var developerKey = 'AIzaSyCJOtKJmdBJhioB-rROY3cidiEsv41YtVY';
 
-      // The Client ID obtained from the Google API Console. Replace with your own Client ID.
-      var clientId = '----ogpddik95k1g2plaqb2h46k1ish3albi.apps.googleusercontent.com';
+    // The Client ID obtained from the Google API Console. Replace with your own Client ID.
+    var clientId = '872697500162-ogpddik95k1g2plaqb2h46k1ish3albi.apps.googleusercontent.com';
+
 
       // Scope to use to access user's photos.
       var scope = 'https://www.googleapis.com/auth/drive.readonly';
@@ -95,7 +96,7 @@
           });
         });
         var message = 'You picked: ' + url;
-        $('#result').prepend(`<img id="theImg" src="${url}" />`)
+        $('#result').prepend(`<img id="theImg" src="https://googleapis.com/drive/v3/files/${docs[0].id}" />`)
         // document.getElementById('result').innerHTML = message;
       }
 
